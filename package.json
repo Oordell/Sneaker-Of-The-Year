@@ -12,8 +12,7 @@
   "dependencies": {
     "jetifier": "^1.6.6",
     "react": "16.13.1",
-    "react-native": "0.63.4",
-    "react-native-update-gradle": "^1.2.0"
+    "react-native": "0.63.4"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
