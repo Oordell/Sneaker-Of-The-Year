@@ -29,10 +29,6 @@ const WelcomeScreen: FC<Props> = ({navigation}) => {
     setSignInFailed(!signInFailed);
   };
 
-  const handleRegisterPressed = () => {
-    console.log('Register Pressed.');
-  };
-
   return (
     <Screen style={styles.container}>
       <AppText style={styles.heading}>Sneaker Of The Year</AppText>
