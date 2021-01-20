@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     textTransform: 'uppercase',
   },

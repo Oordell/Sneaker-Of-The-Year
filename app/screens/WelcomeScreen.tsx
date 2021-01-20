@@ -7,15 +7,29 @@ import Screen from '../components/Screen';
 interface Props {}
 
 const WelcomeScreen: FC<Props> = () => {
+  const handleRegisterPressed = () => {
+    console.log('Register Pressed.');
+  };
+
+  const handleSignInPressed = () => {
+    console.log('Sign In Pressed.');
+  };
+
   return (
     <Screen style={styles.container}>
       <AppText style={styles.heading}>Sneaker Of The Year</AppText>
       <View style={styles.buttonContainer}>
         <AppButton
-          title="Hello"
+          title="Register"
           color="primary"
-          onPress={() => console.log('Pressed')}
-          iconName="google"
+          onPress={handleRegisterPressed}
+          iconName="account-plus"
+        />
+        <AppButton
+          title="Sign in"
+          color="primary"
+          onPress={handleSignInPressed}
+          iconName="login"
         />
       </View>
     </Screen>
