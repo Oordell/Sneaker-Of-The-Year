@@ -55,7 +55,7 @@ const RegisterScreen: FC<Props> = () => {
           secureTextEntry
           textContentType="password"
         />
-        <SubmitButton title="Submit" />
+        <SubmitButton title="Submit" iconName="account-multiple-plus" />
       </AppForm>
     </Screen>
   );
