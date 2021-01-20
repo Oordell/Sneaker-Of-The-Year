@@ -8,13 +8,10 @@
 
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
+import WelcomeScreen from './app/screens/WelcomeScreen';
 
 const App = () => {
-  return (
-    <View style={styles.container}>
-      <Text>Hello Still working</Text>
-    </View>
-  );
+  return <WelcomeScreen />;
 };
 
 const styles = StyleSheet.create({
