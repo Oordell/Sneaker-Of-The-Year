@@ -11,6 +11,9 @@ import {StatusBar} from 'react-native';
 import colors from './app/config/colors';
 import RegisterScreen from './app/screens/RegisterScreen';
 import WelcomeScreen from './app/screens/WelcomeScreen';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+Icon.loadFont();
 
 const App = () => {
   return (
