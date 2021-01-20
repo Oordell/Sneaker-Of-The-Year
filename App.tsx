@@ -8,19 +8,20 @@
 
 import React from 'react';
 import {StatusBar} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import colors from './app/config/colors';
-import RegisterScreen from './app/screens/RegisterScreen';
-import WelcomeScreen from './app/screens/WelcomeScreen';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AuthNavigatior from './app/navigation/AuthNavigatior';
+import navigationTheme from './app/navigation/navigationTheme';
 
 Icon.loadFont();
 
 const App = () => {
   return (
-    <>
+    <NavigationContainer theme={navigationTheme}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <RegisterScreen />
-    </>
+      <AuthNavigatior />
+    </NavigationContainer>
   );
 };
 

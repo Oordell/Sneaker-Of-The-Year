@@ -10,24 +10,23 @@ import {
   ErrorMessage,
   SubmitButton,
 } from '../components/forms';
+import routs from '../navigation/routs';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label('Email'),
   password: Yup.string().required().min(4).label('Password'),
 });
 
-interface Props {}
+interface Props {
+  navigation?: any;
+}
 
-const WelcomeScreen: FC<Props> = () => {
+const WelcomeScreen: FC<Props> = ({navigation}) => {
   const [signInFailed, setSignInFailed] = useState<boolean>(false);
 
   const handleSignInPressed = async ({email, password}) => {
     console.log('Sign In Pressed.');
     setSignInFailed(!signInFailed);
-  };
-
-  const handleRegisterPressed = () => {
-    console.log('Register Pressed.');
   };
 
   return (
@@ -66,7 +65,7 @@ const WelcomeScreen: FC<Props> = () => {
         <AppButton
           title="Register"
           color="primary"
-          onPress={handleRegisterPressed}
+          onPress={() => navigation.navigate(routs.REGISTER)}
           iconName="account-plus"
         />
       </View>
