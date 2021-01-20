@@ -2,7 +2,7 @@ import {Platform} from 'react-native';
 
 import colors from './colors';
 
-export default {
+export default Object.freeze({
   text: {
     color: colors.text,
     fontSize: 18,
@@ -15,4 +15,4 @@ export default {
     shadowOpacity: 0.35,
     shadowRadius: 10,
   },
-};
+});
