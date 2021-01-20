@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: 'center',
+    padding: 10,
   },
   heading: {
     fontSize: 30,

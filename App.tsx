@@ -7,26 +7,18 @@
  */
 
 import React from 'react';
-import {StyleSheet, View, Text, StatusBar} from 'react-native';
+import {StatusBar} from 'react-native';
 import colors from './app/config/colors';
-import SignInScreen from './app/screens/SignInScreen';
+import RegisterScreen from './app/screens/RegisterScreen';
 import WelcomeScreen from './app/screens/WelcomeScreen';
 
 const App = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <WelcomeScreen />
+      <RegisterScreen />
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default App;

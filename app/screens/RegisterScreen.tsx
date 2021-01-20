@@ -1,18 +1,70 @@
-import React, {FC} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {FC, useState} from 'react';
+import {StyleSheet} from 'react-native';
+import {
+  AppForm,
+  AppFormField,
+  ErrorMessage,
+  SubmitButton,
+} from '../components/forms';
 import Screen from '../components/Screen';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required().min(2).label('Name'),
+  email: Yup.string().required().email().label('Email'),
+  password: Yup.string().required().min(4).label('Password'),
+});
 
 interface Props {}
 
 const RegisterScreen: FC<Props> = () => {
-  return <View style={styles.container}></View>;
+  const [error, setError] = useState<string>('');
+
+  const handleSubmit = async (userInfo) => {
+    console.log('Submit pressed. UserInfo: ', userInfo);
+  };
+
+  return (
+    <Screen style={styles.container}>
+      <AppForm
+        initialValues={{name: '', email: '', password: ''}}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}>
+        <ErrorMessage error={error} visible={error} />
+        <AppFormField
+          autoCorrect={false}
+          iconName="account"
+          name="name"
+          placeholder="Name"
+        />
+        <AppFormField
+          autoCapitalize="none"
+          autoCorrect={false}
+          iconName="email"
+          keyboardType="email-address"
+          name="email"
+          placeholder="Email"
+          textContentType="emailAddress"
+        />
+        <AppFormField
+          autoCapitalize="none"
+          autoCorrect={false}
+          iconName="lock"
+          name="password"
+          placeholder="Password"
+          secureTextEntry
+          textContentType="password"
+        />
+        <SubmitButton title="Submit" />
+      </AppForm>
+    </Screen>
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: '95%',
+    alignSelf: 'center',
   },
 });
 
