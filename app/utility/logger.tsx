@@ -2,11 +2,11 @@ const logError = (error: Error) => {
   console.log(error);
 };
 
-const logMessage = (message: String) => {
+const logMessage = (message: string) => {
   console.log(message);
 };
 
-const logErrorAndMessage = (error: Error, message?: String) => {
+const logErrorAndMessage = (error: Error, message?: string) => {
   console.log(message, error);
 };
 
