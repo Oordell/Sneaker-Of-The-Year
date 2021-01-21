@@ -2,13 +2,13 @@ const baseUrl = 'https://api.thesneakerdatabase.com/v1/';
 
 const get10RandomSneakers = async () => {
   try {
-    const response = await fetch(`${baseUrl}sneakers?limit=10`, {
+    const response = await fetch(`${baseUrl}sneakers?limit=10&name=Yeezy`, {
       method: 'GET',
     });
 
     const jsonResponse = await response.json();
     let result = jsonResponse.results;
-    result.forEach(async (a) => {
+    result.forEach(async (a: {media: {json: () => any}}) => {
       try {
         a.media = await a.media.json();
       } catch (error) {
@@ -16,7 +16,7 @@ const get10RandomSneakers = async () => {
       }
     });
 
-    console.log(result);
+    return result;
   } catch (error) {
     console.log('Error: ', error);
   }
