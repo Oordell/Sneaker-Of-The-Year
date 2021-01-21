@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "53158460638",
+    "project_id": "sneaker-of-the-year",
+    "storage_bucket": "sneaker-of-the-year.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53158460638:android:05a5d4d6d8b91519e3164f",
+        "android_client_info": {
+          "package_name": "com.sneakeroftheyear"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53158460638-kr100p8b3fhuvh1ldtf890geju5mdohb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnFTdTI3Xovae6TZKhP_GhMpZV3n9qLHo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53158460638-kr100p8b3fhuvh1ldtf890geju5mdohb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "53158460638-7ra2ql9e9s3qrvk5nu165ist7evt30cm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.SneakerOfTheYear"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
