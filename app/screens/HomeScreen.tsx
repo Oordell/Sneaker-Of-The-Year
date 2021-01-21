@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import authApi from '../api/auth';
+import sneakerDb from '../api/sneakerDb';
 import AppText from '../components/AppText';
 import AppButton from '../components/buttons/AppButton';
 import {useAuth} from '../hooks/useAuth';
@@ -19,7 +20,10 @@ const HomeScreen: FC<Props> = () => {
     <View style={styles.container}>
       <Text>HomeScreen</Text>
       <AppText>UserName: {user.name}</AppText>
-      <AppButton title="print user" onPress={() => console.log(user)} />
+      <AppButton
+        title="get sneakers"
+        onPress={() => sneakerDb.get10RandomSneakers()}
+      />
       <AppButton title="Sign out" onPress={handleSignOutPressed} />
     </View>
   );

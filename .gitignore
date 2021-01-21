@@ -60,3 +60,5 @@ buck-out/
 
 # vs code:
 /.vscode/*
+
+temp.json
