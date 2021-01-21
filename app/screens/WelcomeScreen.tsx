@@ -11,7 +11,7 @@ import {
   SubmitButton,
 } from '../components/forms';
 import routs from '../navigation/routs';
-import auth from '../api/auth';
+import authApi from '../api/auth';
 import {useAuth} from '../hooks/useAuth';
 import logger from '../utility/logger';
 
@@ -30,7 +30,10 @@ const WelcomeScreen: FC<Props> = ({navigation}) => {
 
   const handleSignInPressed = async ({email, password}) => {
     try {
-      const token = await auth.signInWithEmailAndGetAuthToken(email, password);
+      const token = await authApi.signInWithEmailAndGetAuthToken(
+        email,
+        password,
+      );
       signIn(token);
     } catch (error) {
       logger.logErrorAndMessage(error, 'Error trying to sign in the user.');

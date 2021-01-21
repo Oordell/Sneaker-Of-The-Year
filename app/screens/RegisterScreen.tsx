@@ -8,7 +8,7 @@ import {
 } from '../components/forms';
 import Screen from '../components/Screen';
 import * as Yup from 'yup';
-import auth from '../api/auth';
+import authApi from '../api/auth';
 import {useAuth} from '../hooks/useAuth';
 import logger from '../utility/logger';
 
@@ -26,7 +26,7 @@ const RegisterScreen: FC<Props> = () => {
 
   const handleSubmit = async ({name, email, password}) => {
     try {
-      const token = await auth.createUserFromEmailAndGetAuthToken(
+      const token = await authApi.createUserFromEmailAndGetAuthToken(
         email,
         password,
         name,
