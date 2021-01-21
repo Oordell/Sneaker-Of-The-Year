@@ -8,6 +8,9 @@ import {
 } from '../components/forms';
 import Screen from '../components/Screen';
 import * as Yup from 'yup';
+import auth from '../api/auth';
+import {useAuth} from '../hooks/useAuth';
+import logger from '../utility/logger';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(2).label('Name'),
@@ -19,9 +22,20 @@ interface Props {}
 
 const RegisterScreen: FC<Props> = () => {
   const [error, setError] = useState<string>('');
+  const {signIn} = useAuth();
 
-  const handleSubmit = async (userInfo) => {
-    console.log('Submit pressed. UserInfo: ', userInfo);
+  const handleSubmit = async ({name, email, password}) => {
+    try {
+      const token = await auth.createUserFromEmailAndGetAuthToken(
+        email,
+        password,
+        name,
+      );
+
+      signIn(token);
+    } catch (error) {
+      logger.logErrorAndMessage(error, 'Error trying to create a new user.');
+    }
   };
 
   return (

@@ -11,6 +11,9 @@ import {
   SubmitButton,
 } from '../components/forms';
 import routs from '../navigation/routs';
+import auth from '../api/auth';
+import {useAuth} from '../hooks/useAuth';
+import logger from '../utility/logger';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label('Email'),
@@ -23,10 +26,16 @@ interface Props {
 
 const WelcomeScreen: FC<Props> = ({navigation}) => {
   const [signInFailed, setSignInFailed] = useState<boolean>(false);
+  const {signIn} = useAuth();
 
   const handleSignInPressed = async ({email, password}) => {
-    console.log('Sign In Pressed.');
-    setSignInFailed(!signInFailed);
+    try {
+      const token = await auth.signInWithEmailAndGetAuthToken(email, password);
+      signIn(token);
+    } catch (error) {
+      logger.logErrorAndMessage(error, 'Error trying to sign in the user.');
+      setSignInFailed(true);
+    }
   };
 
   return (

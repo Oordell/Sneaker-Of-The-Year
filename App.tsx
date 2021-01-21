@@ -6,22 +6,31 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {StatusBar} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import colors from './app/config/colors';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AuthNavigatior from './app/navigation/AuthNavigatior';
 import navigationTheme from './app/navigation/navigationTheme';
+import AuthContext from './app/auth/context';
+import HomeScreen from './app/screens/HomeScreen';
 
 Icon.loadFont();
 
 const App = () => {
+  const [user, setUser] = useState();
+
   return (
-    <NavigationContainer theme={navigationTheme}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <AuthNavigatior />
-    </NavigationContainer>
+    <AuthContext.Provider value={{user, setUser}}>
+      <NavigationContainer theme={navigationTheme}>
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor={colors.background}
+        />
+        {user ? <HomeScreen /> : <AuthNavigatior />}
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 };
 
