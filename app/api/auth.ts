@@ -22,8 +22,7 @@ const createUserFromEmailAndGetAuthToken = async (
 
     return await result.user.getIdToken();
   } catch (error) {
-    logger.logMessage(`Error trying to create new user`);
-    logger.logError(error);
+    logger.logErrorAndMessage(error, `Error trying to create new user`);
   }
 };
 

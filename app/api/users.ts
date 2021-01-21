@@ -35,6 +35,7 @@ const createNewOrUpdateUser = async (userInfo: UserInfo) => {
       email: userInfo.email,
       isAdmin: userInfo.isAdmin ? userInfo.isAdmin : false,
       lastSignin: firestore.Timestamp.now(),
+      createdAt: firestore.Timestamp.now(),
     });
   } catch (error) {
     logger.logErrorAndMessage(error, 'Error storing the user in Firestore.');
