@@ -1,5 +1,6 @@
 import firebaseAuth from '@react-native-firebase/auth';
 import logger from '../utility/logger';
+import usersApi from './users';
 
 const createUserFromEmailAndGetAuthToken = async (
   email: string,
@@ -17,6 +18,8 @@ const createUserFromEmailAndGetAuthToken = async (
       displayName: name,
     });
 
+    await usersApi.createNewOrUpdateUser({name, email});
+
     return await result.user.getIdToken();
   } catch (error) {
     logger.logMessage(`Error trying to create new user`);
@@ -33,6 +36,8 @@ const signInWithEmailAndGetAuthToken = async (
       email,
       password,
     );
+
+    await usersApi.createNewOrUpdateUser({email});
 
     return await result.user.getIdToken();
   } catch (error) {
