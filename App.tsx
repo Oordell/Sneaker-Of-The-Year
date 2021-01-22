@@ -20,7 +20,7 @@ import authStorage from './app/auth/storage';
 Icon.loadFont();
 
 const App = () => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<any>();
 
   useEffect(() => {
     restoreUser();

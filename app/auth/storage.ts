@@ -6,7 +6,7 @@ const keyToken = 'authToken';
 
 const storeToken = async (authToken: string) => {
   try {
-    const res = await Keychain.setGenericPassword(keyToken, authToken);
+    await Keychain.setGenericPassword(keyToken, authToken);
   } catch (error) {
     logger.logErrorAndMessage(
       error,
