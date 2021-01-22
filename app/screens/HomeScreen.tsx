@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
-import {View, StyleSheet, Text, FlatList, Image} from 'react-native';
+import {View, StyleSheet, FlatList, Image} from 'react-native';
 import authApi from '../api/auth';
-import brands from '../api/brands';
+import brands from '../api/sneakerBrands';
 import sneakerDb from '../api/sneakerDb';
 import AppText from '../components/AppText';
 import AppButton from '../components/buttons/AppButton';
@@ -22,7 +22,7 @@ const HomeScreen: FC<Props> = () => {
     const sneakers = await sneakerDb.getSneakers({
       limit: 10,
       brand: brands.NIKE,
-      name: 'off-white',
+      name: 'off white',
       releaseYear: 2020,
     });
     setSneakers(sneakers);
