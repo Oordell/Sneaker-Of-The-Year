@@ -1,6 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import {View, StyleSheet, Text, FlatList, Image} from 'react-native';
 import authApi from '../api/auth';
+import brands from '../api/brands';
 import sneakerDb from '../api/sneakerDb';
 import AppText from '../components/AppText';
 import AppButton from '../components/buttons/AppButton';
@@ -10,15 +11,20 @@ import {useAuth} from '../hooks/useAuth';
 interface Props {}
 
 const HomeScreen: FC<Props> = () => {
-  const {user, signOut} = useAuth();
-  const [sneakers, setSneakers] = useState<{}>();
+  const {signOut} = useAuth();
+  const [sneakers, setSneakers] = useState<readonly any[]>();
 
   useEffect(() => {
     loadSneakers();
   }, []);
 
   const loadSneakers = async () => {
-    const sneakers = await sneakerDb.get10RandomSneakers();
+    const sneakers = await sneakerDb.getSneakers({
+      limit: 10,
+      brand: brands.NIKE,
+      name: 'off-white',
+      releaseYear: 2020,
+    });
     setSneakers(sneakers);
   };
 
@@ -32,6 +38,9 @@ const HomeScreen: FC<Props> = () => {
       <FlatList
         data={sneakers}
         keyExtractor={(sneaker) => sneaker.id.toString()}
+        ListHeaderComponent={
+          <AppButton title="Get sneakers" onPress={loadSneakers} />
+        }
         ListFooterComponent={
           <AppButton title="Sign out" onPress={handleSignOutPressed} />
         }

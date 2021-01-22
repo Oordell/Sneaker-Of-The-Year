@@ -1,0 +1,14 @@
+export default Object.freeze({
+  ASICS: 'ASICS',
+  CONVERSE: 'CONVERSE',
+  JORDAN: 'JORDAN',
+  NEW_BALANCE: 'NEW BALANCE',
+  NIKE: 'NIKE',
+  PUMA: 'PUMA',
+  REEBOK: 'REEBOK',
+  SAUCONY: 'SAUCONY',
+  UNDER_ARMOUR: 'UNDER ARMOUR',
+  VANS: 'VANS',
+  YEEZY: 'YEEZY',
+  ADIDAS: 'ADIDAS',
+});
