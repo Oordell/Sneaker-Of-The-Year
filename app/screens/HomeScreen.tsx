@@ -1,10 +1,10 @@
 import React, {FC, useEffect, useState} from 'react';
-import {View, StyleSheet, FlatList, Image} from 'react-native';
+import {StyleSheet, FlatList} from 'react-native';
 import authApi from '../api/auth';
 import brands from '../api/sneakerBrands';
 import sneakerDb from '../api/sneakerDb';
-import AppText from '../components/AppText';
 import AppButton from '../components/buttons/AppButton';
+import ListItem from '../components/ListItem';
 import Screen from '../components/Screen';
 import {useAuth} from '../hooks/useAuth';
 
@@ -45,13 +45,16 @@ const HomeScreen: FC<Props> = () => {
           <AppButton title="Sign out" onPress={handleSignOutPressed} />
         }
         renderItem={({item}) => (
-          <View style={{alignItems: 'center'}}>
-            <AppText>{item.title}</AppText>
-            <Image
-              style={{width: 140, height: 100, resizeMode: 'cover'}}
-              source={{uri: item.media.thumbUrl}}
-            />
-          </View>
+          <ListItem
+            brand={item.brand}
+            name={item.name}
+            media={item.media}
+            shoe={item.shoe}
+            title={item.title}
+            year={item.year}
+            releaseDate={item.releaseDate}
+            retailPrice={item.retailPrice}
+          />
         )}
       />
     </Screen>
