@@ -1,16 +1,16 @@
 import React, {FC} from 'react';
-import {Text, StyleProp, TextStyle} from 'react-native';
+import {Text} from 'react-native';
 
 import defaultStyles from '../config/style';
 
 interface Props {
-  style?: StyleProp<TextStyle>;
+  style?: any;
   [propName: string]: any;
 }
 
-const AppText: FC<Props> = ({children, style, numberOfLines}) => {
+const AppText: FC<Props> = ({children, style, ...otherProps}) => {
   return (
-    <Text numberOfLines={numberOfLines} style={[defaultStyles.text, style]}>
+    <Text {...otherProps} style={[defaultStyles.text, style]}>
       {children}
     </Text>
   );

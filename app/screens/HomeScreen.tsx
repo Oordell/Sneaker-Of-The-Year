@@ -36,7 +36,9 @@ const HomeScreen: FC<Props> = () => {
   return (
     <Screen style={styles.container}>
       <FlatList
+        style={styles.list}
         data={sneakers}
+        numColumns={2}
         keyExtractor={(sneaker) => sneaker.id.toString()}
         ListHeaderComponent={
           <AppButton title="Get sneakers" onPress={loadSneakers} />
@@ -63,9 +65,13 @@ const HomeScreen: FC<Props> = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  list: {
+    flex: 1,
+    width: '100%',
+    paddingHorizontal: 10,
   },
 });
 

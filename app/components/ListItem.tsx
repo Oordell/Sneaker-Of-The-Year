@@ -25,41 +25,34 @@ interface Sneakers {
   year?: number;
 }
 
-const ListItem: FC<Sneakers> = ({media, title, releaseDate}) => {
+const ListItem: FC<Sneakers> = ({media, shoe, name}) => {
   return (
-    <Pressable style={styles.container}>
-      <View style={[styles.card, defaultStyles.shadows]}>
-        <Image style={styles.image} source={{uri: media.thumbUrl}} />
-        <View style={styles.details}>
-          <AppText numberOfLines={3}>{title}</AppText>
-          <AppText numberOfLines={1}>Release: {releaseDate}</AppText>
-        </View>
+    <Pressable style={[styles.container, defaultStyles.shadows]}>
+      <Image style={styles.image} source={{uri: media.thumbUrl}} />
+      <View style={styles.details}>
+        <AppText numberOfLines={1}>{shoe}</AppText>
+        <AppText numberOfLines={1}>{name}</AppText>
       </View>
     </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
+  container: {
     backgroundColor: colors.background,
     borderRadius: 20,
-    padding: 20,
-    width: '100%',
-    flexDirection: 'row',
-  },
-  container: {
+    padding: 10,
     alignItems: 'center',
-    flexDirection: 'row',
-    marginHorizontal: 15,
-    marginVertical: 5,
-  },
-  details: {
+    margin: 10,
     flex: 1,
   },
+  details: {
+    alignItems: 'flex-start',
+  },
   image: {
-    marginRight: 10,
     width: 140,
     height: 100,
+    alignSelf: 'center',
   },
   textBrand: {
     fontWeight: 'bold',
