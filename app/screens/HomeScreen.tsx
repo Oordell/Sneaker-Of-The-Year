@@ -148,7 +148,7 @@ const HomeScreen: FC<Props> = () => {
         <RadioButtonGroup
           buttons={buttonsPopular}
           selectedButton={selectedPopular}
-          onPress={(btn) => setSelectedPopular(btn)}
+          onPress={(btn) => handlePopularPressed(btn)}
         />
       );
     } else if (selectedCategory === Categories.Year) {
@@ -156,7 +156,7 @@ const HomeScreen: FC<Props> = () => {
         <RadioButtonGroup
           buttons={buttonsYear}
           selectedButton={selectedYear}
-          onPress={(btn) => setSelectedYear(btn)}
+          onPress={(btn) => handleYearPressed(btn)}
         />
       );
     }
@@ -182,7 +182,51 @@ const HomeScreen: FC<Props> = () => {
       limit: 10,
       brand: reqBrand,
       name: reqName,
-      page: page,
+      page: 0,
+    });
+    setSneakers(sneakers);
+  };
+
+  const handlePopularPressed = async (popular: Popular) => {
+    setSelectedPopular(popular);
+    let reqName: string;
+    let reqBrand: string;
+    if (popular === Popular.Dunk) {
+      reqName = 'dunk';
+      reqBrand = 'nike';
+    }
+    if (popular === Popular.Travis) {
+      reqName = 'travis scott';
+      reqBrand = 'nike';
+    }
+    if (popular === Popular.OffWhite) {
+      reqName = 'OFF-WHITE';
+      reqBrand = 'nike';
+    }
+    if (popular === Popular.Yeezy) {
+      reqName = 'yeezy';
+      reqBrand = 'adidas';
+    }
+    if (popular === Popular.Sacai) {
+      reqName = 'sacai';
+      reqBrand = 'nike';
+    }
+    if (popular === Popular.Jordan) reqBrand = 'JORDAN';
+    const sneakers = await sneakerDb.getSneakers({
+      limit: 10,
+      brand: reqBrand,
+      name: reqName,
+      page: 0,
+    });
+    setSneakers(sneakers);
+  };
+
+  const handleYearPressed = async (year: Year) => {
+    setSelectedYear(year);
+    const sneakers = await sneakerDb.getSneakers({
+      limit: 10,
+      releaseYear: year,
+      page: 0,
     });
     setSneakers(sneakers);
   };
