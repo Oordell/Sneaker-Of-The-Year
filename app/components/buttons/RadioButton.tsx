@@ -17,11 +17,11 @@ const RadioButton: FC<Props> = ({style, title, imagePath, ...otherProps}) => {
         styles.container,
         defaultStylse.shadows,
         style,
-        {paddingVertical: imagePath ? 5 : 15},
+        {paddingVertical: imagePath && title ? 5 : 15},
       ]}
       {...otherProps}>
-      {title && <AppText style={styles.text}>{title}</AppText>}
       {imagePath && <Image source={imagePath} style={styles.image} />}
+      {title && <AppText style={styles.text}>{title}</AppText>}
     </Pressable>
   );
 };
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 50,
+    borderRadius: 20,
     backgroundColor: colors.background,
     padding: 15,
     marginHorizontal: 10,
