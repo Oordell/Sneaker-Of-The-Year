@@ -68,7 +68,7 @@ const getSneakers = async (params: Parameters) => {
     const response = await fetch(`${baseUrl}sneakers${parameters}`);
     const jsonResponse = await response.json();
 
-    return jsonResponse.results;
+    return jsonResponse;
   } catch (error) {
     logger.logErrorAndMessage(error, 'Error getting sneakers from API.');
   }

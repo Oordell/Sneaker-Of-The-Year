@@ -1,133 +1,76 @@
 import React, {FC, useEffect, useState} from 'react';
-import {StyleSheet, FlatList} from 'react-native';
-import authApi from '../api/auth';
-import brands from '../api/sneakerBrands';
+import {FlatList, StyleSheet} from 'react-native';
+import snkrBrand from '../api/sneakerBrands';
 import sneakerDb from '../api/sneakerDb';
-import requireLogos from '../assets/brandLogos/requireLogos';
-import requireSneaker from '../assets/sneakers/requireSneaker';
-import AppButton from '../components/buttons/AppButton';
-import RadioButtonGroup from '../components/buttons/RadioButtonGroup';
-import ListItem from '../components/ListItem';
 import Screen from '../components/Screen';
 import {useAuth} from '../hooks/useAuth';
-
-enum Categories {
-  Brands = 0,
-  Popular = 1,
-  Year = 2,
-}
-
-enum Brands {
-  Nike = 0,
-  Jordan = 1,
-  Adidas = 2,
-  Yeezy = 3,
-  NewBalance = 4,
-  Asics = 5,
-  Puma = 6,
-  Converse = 7,
-  Vans = 8,
-  Reebok = 9,
-  Saucony = 10,
-  UnderArmour = 11,
-}
-
-enum Popular {
-  Dunk = 0,
-  Travis = 1,
-  OffWhite = 2,
-  Yeezy = 3,
-  Sacai = 4,
-  Jordan = 5,
-}
-
-enum Year {
-  Y2010 = 2010,
-  Y2011 = 2011,
-  Y2012 = 2012,
-  Y2013 = 2013,
-  Y2014 = 2014,
-  Y2015 = 2015,
-  Y2016 = 2016,
-  Y2017 = 2017,
-  Y2018 = 2018,
-  Y2019 = 2019,
-  Y2020 = 2020,
-  Y2021 = 2021,
-}
+import authApi from '../api/auth';
+import RadioButtonGroup from '../components/buttons/RadioButtonGroup';
+import AppButton from '../components/buttons/AppButton';
+import ListItem from '../components/ListItem';
+import sneakerCategories from '../api/sneakerCategories';
+import RadioButtonPresets from '../components/buttons/RadioButtonPresets';
+import snkrPopular from '../api/sneakerPopular';
 
 interface Props {}
+
+interface ReqParams {
+  page?: number;
+  styleId?: number;
+  name?: string;
+  shoe?: string;
+  brand?: string;
+  gender?: string;
+  colorway?: string;
+  releaseDate?: string;
+  releaseYear?: number;
+  sort?: string;
+}
+
+const pageLimit: number = 20;
 
 const HomeScreen: FC<Props> = () => {
   const {signOut} = useAuth();
   const [sneakers, setSneakers] = useState<any[]>();
+  const [countOfSneakers, setCountOfSneakers] = useState<number>(0);
 
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
   const [selectedBrand, setSelectedBrand] = useState<number>(0);
   const [selectedPopular, setSelectedPopular] = useState<number>(-1);
   const [selectedYear, setSelectedYear] = useState<number>(-1);
-  const [page, setPage] = useState<number>(0);
 
-  const buttonsCategories = [
-    {_id: Categories.Brands, title: 'Brand'},
-    {_id: Categories.Popular, title: 'Popular'},
-    {_id: Categories.Year, title: 'Year'},
-  ];
-  const buttonsBrands = [
-    {_id: Brands.Nike, imagePath: requireLogos.NIKE},
-    {_id: Brands.Jordan, imagePath: requireLogos.JORDAN},
-    {_id: Brands.Adidas, imagePath: requireLogos.ADIDAS},
-    {_id: Brands.Yeezy, imagePath: requireLogos.YEEZY},
-    {_id: Brands.NewBalance, imagePath: requireLogos.NEW_BALANCE},
-    {_id: Brands.Asics, imagePath: requireLogos.ASICS},
-    {_id: Brands.Puma, imagePath: requireLogos.PUMA},
-    {_id: Brands.Converse, imagePath: requireLogos.CONVERSE},
-    {_id: Brands.Vans, imagePath: requireLogos.VANS},
-    {_id: Brands.Reebok, imagePath: requireLogos.REEBOK},
-    {_id: Brands.Saucony, imagePath: requireLogos.SAUCONY},
-    {_id: Brands.UnderArmour, imagePath: requireLogos.UNDER_ARMOUR},
-  ];
-  const buttonsPopular = [
-    {_id: Popular.Dunk, imagePath: requireSneaker.DUNK, title: 'DUNK'},
-    {_id: Popular.Travis, imagePath: requireSneaker.TRAVIS, title: 'TRAVIS'},
-    {
-      _id: Popular.OffWhite,
-      imagePath: requireSneaker.OFF_WHITE,
-      title: 'OFF-WHITE',
-    },
-    {_id: Popular.Yeezy, imagePath: requireSneaker.YEEZY, title: 'YEEZY'},
-    {_id: Popular.Sacai, imagePath: requireSneaker.SACAI, title: 'SACAI'},
-    {_id: Popular.Jordan, imagePath: requireSneaker.JORDAN, title: 'JORDAN'},
-  ];
-  const buttonsYear = [
-    {_id: Year.Y2010, title: '2010'},
-    {_id: Year.Y2011, title: '2011'},
-    {_id: Year.Y2012, title: '2012'},
-    {_id: Year.Y2013, title: '2013'},
-    {_id: Year.Y2014, title: '2014'},
-    {_id: Year.Y2015, title: '2015'},
-    {_id: Year.Y2016, title: '2016'},
-    {_id: Year.Y2017, title: '2017'},
-    {_id: Year.Y2018, title: '2018'},
-    {_id: Year.Y2019, title: '2019'},
-    {_id: Year.Y2020, title: '2020'},
-    {_id: Year.Y2021, title: '2021'},
-  ];
+  const [reqParam, setReqParam] = useState<ReqParams>({page: 0});
 
   useEffect(() => {
-    loadSneakers();
-    setSelectedCategory(0);
-    setPage(0);
+    loadInitialSneakers();
   }, []);
 
-  const loadSneakers = async () => {
+  useEffect(() => {
+    loadNewSneakers();
+  }, [reqParam]);
+
+  const loadNewSneakers = async () => {
+    const newSneakers = await sneakerDb.getSneakers({
+      limit: pageLimit,
+      ...reqParam,
+    });
+
+    if (reqParam.page === 0) {
+      setSneakers(newSneakers.results);
+      setCountOfSneakers(newSneakers.count);
+    } else {
+      setSneakers([...sneakers, ...newSneakers.results]);
+    }
+  };
+
+  const loadInitialSneakers = async () => {
     const sneakers = await sneakerDb.getSneakers({
-      limit: 10,
-      brand: brands.NIKE,
-      name: 'off white',
+      limit: pageLimit,
+      brand: 'nike',
       releaseYear: 2020,
     });
-    setSneakers(sneakers);
+    setCountOfSneakers(sneakers.count);
+    setSneakers(sneakers.results);
   };
 
   const handleSignOutPressed = () => {
@@ -136,123 +79,103 @@ const HomeScreen: FC<Props> = () => {
   };
 
   const categorySelection = () => {
-    if (selectedCategory === Categories.Brands) {
+    if (selectedCategory === sneakerCategories.BRANDS._id) {
       return (
         <RadioButtonGroup
-          buttons={buttonsBrands}
+          buttons={RadioButtonPresets.btnsBrands}
           selectedButton={selectedBrand}
-          onPress={(btn) => {
-            setPage(0);
-            handleBrandPressed(btn);
-          }}
+          onPress={(btn) => handleSelectedBrandPressed(btn)}
         />
       );
-    } else if (selectedCategory === Categories.Popular) {
+    } else if (selectedCategory === sneakerCategories.POPULAR._id) {
       return (
         <RadioButtonGroup
-          buttons={buttonsPopular}
+          buttons={RadioButtonPresets.btnsPopular}
           selectedButton={selectedPopular}
-          onPress={(btn) => {
-            setPage(0);
-            handlePopularPressed(btn);
-          }}
+          onPress={(btn) => handleSelectedPopularPressed(btn)}
         />
       );
-    } else if (selectedCategory === Categories.Year) {
+    } else if (selectedCategory === sneakerCategories.YEAR._id) {
       return (
         <RadioButtonGroup
-          buttons={buttonsYear}
+          buttons={RadioButtonPresets.btnsYear}
           selectedButton={selectedYear}
-          onPress={(btn) => {
-            setPage(0);
-            handleYearPressed(btn);
-          }}
+          onPress={(btn) => handleSelectedYearPressed(btn)}
         />
       );
     }
   };
 
-  const handleBrandPressed = async (brand: Brands, append: boolean = false) => {
-    setSelectedBrand(brand);
-    if (append) setPage(page + 1);
-    let reqBrand: string;
-    let reqName: string;
-    if (brand === Brands.Nike) reqBrand = brands.NIKE;
-    else if (brand === Brands.Jordan) reqBrand = brands.JORDAN;
-    else if (brand === Brands.Adidas) reqBrand = brands.ADIDAS;
-    else if (brand === Brands.Yeezy) reqName = brands.YEEZY;
-    else if (brand === Brands.NewBalance) reqBrand = brands.NEW_BALANCE;
-    else if (brand === Brands.Asics) reqBrand = brands.ASICS;
-    else if (brand === Brands.Puma) reqBrand = brands.PUMA;
-    else if (brand === Brands.Converse) reqBrand = brands.CONVERSE;
-    else if (brand === Brands.Vans) reqBrand = brands.VANS;
-    else if (brand === Brands.Reebok) reqBrand = brands.REEBOK;
-    else if (brand === Brands.Saucony) reqBrand = brands.SAUCONY;
-    else if (brand === Brands.UnderArmour) reqBrand = brands.UNDER_ARMOUR;
-    const newSneakers = await sneakerDb.getSneakers({
-      limit: 10,
-      brand: reqBrand,
-      name: reqName,
-      page: page,
-    });
-    if (append) setSneakers([...sneakers, ...newSneakers]);
-    else setSneakers(newSneakers);
+  const handleSelectedBrandPressed = (btn: number) => {
+    setSelectedBrand(btn);
+    handleSetSneakerBrandReq(btn);
   };
 
-  const handlePopularPressed = async (
-    popular: Popular,
-    append: boolean = false,
-  ) => {
-    setSelectedPopular(popular);
-    if (append) setPage(page + 1);
-    let reqName: string;
-    let reqBrand: string;
-    if (popular === Popular.Dunk) {
-      reqName = 'dunk';
-      reqBrand = 'nike';
-    } else if (popular === Popular.Travis) {
-      reqName = 'travis scott';
-      reqBrand = 'nike';
-    } else if (popular === Popular.OffWhite) {
-      reqName = 'off white';
-      reqBrand = 'nike';
-    } else if (popular === Popular.Yeezy) {
-      reqName = 'yeezy';
-      reqBrand = 'adidas';
-    } else if (popular === Popular.Sacai) {
-      reqName = 'sacai';
-      reqBrand = 'nike';
-    } else if (popular === Popular.Jordan) reqBrand = 'JORDAN';
-    const newSneakers = await sneakerDb.getSneakers({
-      limit: 10,
-      brand: reqBrand,
-      name: reqName,
-      page: page,
-    });
-    if (append) setSneakers([...sneakers, ...newSneakers]);
-    else setSneakers(newSneakers);
+  const handleSelectedPopularPressed = (btn: number) => {
+    setSelectedPopular(btn);
+    handleSetSneakerPopularReq(btn);
   };
 
-  const handleYearPressed = async (year: Year, append: boolean = false) => {
-    setSelectedYear(year);
-    if (append) setPage(page + 1);
-    const newSneakers = await sneakerDb.getSneakers({
-      limit: 10,
-      releaseYear: year,
-      page: page,
-    });
-    if (append) setSneakers([...sneakers, ...newSneakers]);
-    else setSneakers(newSneakers);
+  const handleSelectedYearPressed = (btn: number) => {
+    setSelectedYear(btn);
+    handleSetSneakerYearReq(btn);
   };
 
-  const handleEndReached = () => {
-    console.log('End reached');
-    if (selectedCategory === Categories.Brands)
-      handleBrandPressed(selectedBrand, true);
-    else if (selectedCategory === Categories.Popular)
-      handlePopularPressed(selectedPopular, true);
-    else if (selectedCategory === Categories.Year)
-      handleYearPressed(selectedYear, true);
+  const handleSetSneakerBrandReq = (brandId: number) => {
+    let name: string;
+    let brand: string;
+
+    for (let brandObj in snkrBrand) {
+      if (snkrBrand[brandObj]._id === brandId) {
+        if (snkrBrand.YEEZY._id === brandId) {
+          name = snkrBrand[brandObj].name;
+          brand = snkrBrand.ADIDAS.name;
+        } else {
+          brand = snkrBrand[brandObj].name;
+        }
+      }
+    }
+
+    const params: ReqParams = {
+      page: 0,
+      brand: brand,
+      name: name,
+    };
+    setReqParam(params);
+  };
+
+  const handleSetSneakerPopularReq = (popularId: number) => {
+    let name: string;
+    let brand: string;
+
+    for (let popular in snkrPopular) {
+      if (snkrPopular[popular]._id === popularId) {
+        brand = snkrPopular[popular].brand;
+        if (popularId !== snkrPopular.JORDAN._id)
+          name = snkrPopular[popular].name;
+      }
+    }
+
+    const params: ReqParams = {
+      page: 0,
+      name: name,
+      brand: brand,
+    };
+    setReqParam(params);
+  };
+
+  const handleSetSneakerYearReq = (yearId: number) => {
+    const params: ReqParams = {
+      page: 0,
+      releaseYear: yearId,
+    };
+    setReqParam(params);
+  };
+
+  const handleLoadMorePressed = () => {
+    let params = {...reqParam};
+    params.page += 1;
+    setReqParam(params);
   };
 
   return (
@@ -265,7 +188,7 @@ const HomeScreen: FC<Props> = () => {
         ListHeaderComponent={
           <>
             <RadioButtonGroup
-              buttons={buttonsCategories}
+              buttons={RadioButtonPresets.btnsCategories}
               selectedButton={selectedCategory}
               onPress={(btn) => setSelectedCategory(btn)}
             />
@@ -273,7 +196,10 @@ const HomeScreen: FC<Props> = () => {
           </>
         }
         ListFooterComponent={
-          <AppButton title="Sign out" onPress={handleSignOutPressed} />
+          <>
+            <AppButton title="Load more" onPress={handleLoadMorePressed} />
+            <AppButton title="Sign out" onPress={handleSignOutPressed} />
+          </>
         }
         renderItem={({item}) => (
           <ListItem
@@ -287,8 +213,6 @@ const HomeScreen: FC<Props> = () => {
             retailPrice={item.retailPrice}
           />
         )}
-        onEndReached={() => handleEndReached()}
-        onEndReachedThreshold={1}
       />
     </Screen>
   );
