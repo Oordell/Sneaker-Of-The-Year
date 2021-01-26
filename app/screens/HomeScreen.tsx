@@ -1,36 +1,184 @@
 import React, {FC, useEffect, useState} from 'react';
-import {StyleSheet, FlatList} from 'react-native';
-import authApi from '../api/auth';
-import brands from '../api/sneakerBrands';
+import {FlatList, StyleSheet} from 'react-native';
+import snkrBrand from '../api/sneakerBrands';
 import sneakerDb from '../api/sneakerDb';
-import AppButton from '../components/buttons/AppButton';
-import ListItem from '../components/ListItem';
 import Screen from '../components/Screen';
 import {useAuth} from '../hooks/useAuth';
+import authApi from '../api/auth';
+import RadioButtonGroup from '../components/buttons/RadioButtonGroup';
+import AppButton from '../components/buttons/AppButton';
+import ListItem from '../components/ListItem';
+import sneakerCategories from '../api/sneakerCategories';
+import RadioButtonPresets from '../components/buttons/RadioButtonPresets';
+import snkrPopular from '../api/sneakerPopular';
 
 interface Props {}
 
+interface ReqParams {
+  page?: number;
+  styleId?: number;
+  name?: string;
+  shoe?: string;
+  brand?: string;
+  gender?: string;
+  colorway?: string;
+  releaseDate?: string;
+  releaseYear?: number;
+  sort?: string;
+}
+
+const pageLimit: number = 20;
+
 const HomeScreen: FC<Props> = () => {
   const {signOut} = useAuth();
-  const [sneakers, setSneakers] = useState<readonly any[]>();
+  const [sneakers, setSneakers] = useState<any[]>();
+  const [countOfSneakers, setCountOfSneakers] = useState<number>(0);
+
+  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+  const [selectedBrand, setSelectedBrand] = useState<number>(0);
+  const [selectedPopular, setSelectedPopular] = useState<number>(-1);
+  const [selectedYear, setSelectedYear] = useState<number>(-1);
+
+  const [reqParam, setReqParam] = useState<ReqParams>({page: 0});
 
   useEffect(() => {
-    loadSneakers();
+    loadInitialSneakers();
   }, []);
 
-  const loadSneakers = async () => {
+  useEffect(() => {
+    loadNewSneakers();
+  }, [reqParam]);
+
+  const loadNewSneakers = async () => {
+    const newSneakers = await sneakerDb.getSneakers({
+      limit: pageLimit,
+      ...reqParam,
+    });
+
+    if (reqParam.page === 0) {
+      setSneakers(newSneakers.results);
+      setCountOfSneakers(newSneakers.count);
+    } else {
+      setSneakers([...sneakers, ...newSneakers.results]);
+    }
+  };
+
+  const loadInitialSneakers = async () => {
     const sneakers = await sneakerDb.getSneakers({
-      limit: 10,
-      brand: brands.NIKE,
-      name: 'off white',
+      limit: pageLimit,
+      brand: 'nike',
       releaseYear: 2020,
     });
-    setSneakers(sneakers);
+    setCountOfSneakers(sneakers.count);
+    setSneakers(sneakers.results);
   };
 
   const handleSignOutPressed = () => {
     authApi.signOut();
     signOut();
+  };
+
+  const categorySelection = () => {
+    if (selectedCategory === sneakerCategories.BRANDS._id) {
+      return (
+        <RadioButtonGroup
+          buttons={RadioButtonPresets.btnsBrands}
+          selectedButton={selectedBrand}
+          onPress={(btn) => handleSelectedBrandPressed(btn)}
+        />
+      );
+    } else if (selectedCategory === sneakerCategories.POPULAR._id) {
+      return (
+        <RadioButtonGroup
+          buttons={RadioButtonPresets.btnsPopular}
+          selectedButton={selectedPopular}
+          onPress={(btn) => handleSelectedPopularPressed(btn)}
+        />
+      );
+    } else if (selectedCategory === sneakerCategories.YEAR._id) {
+      return (
+        <RadioButtonGroup
+          buttons={RadioButtonPresets.btnsYear}
+          selectedButton={selectedYear}
+          onPress={(btn) => handleSelectedYearPressed(btn)}
+        />
+      );
+    }
+  };
+
+  const handleSelectedBrandPressed = (btn: number) => {
+    setSelectedBrand(btn);
+    handleSetSneakerBrandReq(btn);
+  };
+
+  const handleSelectedPopularPressed = (btn: number) => {
+    setSelectedPopular(btn);
+    handleSetSneakerPopularReq(btn);
+  };
+
+  const handleSelectedYearPressed = (btn: number) => {
+    setSelectedYear(btn);
+    handleSetSneakerYearReq(btn);
+  };
+
+  const handleSetSneakerBrandReq = (brandId: number) => {
+    let name: string;
+    let brand: string;
+
+    for (let brandObj in snkrBrand) {
+      if (snkrBrand[brandObj]._id === brandId) {
+        if (snkrBrand.YEEZY._id === brandId) {
+          name = snkrBrand[brandObj].name;
+          brand = snkrBrand.ADIDAS.name;
+        } else {
+          brand = snkrBrand[brandObj].name;
+        }
+      }
+    }
+
+    const params: ReqParams = {
+      ...reqParam,
+      page: 0,
+      brand: brand,
+      name: name,
+    };
+    setReqParam(params);
+  };
+
+  const handleSetSneakerPopularReq = (popularId: number) => {
+    let name: string;
+    let brand: string;
+
+    for (let popular in snkrPopular) {
+      if (snkrPopular[popular]._id === popularId) {
+        brand = snkrPopular[popular].brand;
+        if (popularId !== snkrPopular.JORDAN._id)
+          name = snkrPopular[popular].name;
+      }
+    }
+
+    const params: ReqParams = {
+      ...reqParam,
+      page: 0,
+      name: name,
+      brand: brand,
+    };
+    setReqParam(params);
+  };
+
+  const handleSetSneakerYearReq = (yearId: number) => {
+    const params: ReqParams = {
+      ...reqParam,
+      page: 0,
+      releaseYear: yearId,
+    };
+    setReqParam(params);
+  };
+
+  const handleLoadMorePressed = () => {
+    let params = {...reqParam};
+    params.page += 1;
+    setReqParam(params);
   };
 
   return (
@@ -41,10 +189,20 @@ const HomeScreen: FC<Props> = () => {
         numColumns={2}
         keyExtractor={(sneaker) => sneaker.id.toString()}
         ListHeaderComponent={
-          <AppButton title="Get sneakers" onPress={loadSneakers} />
+          <>
+            <RadioButtonGroup
+              buttons={RadioButtonPresets.btnsCategories}
+              selectedButton={selectedCategory}
+              onPress={(btn) => setSelectedCategory(btn)}
+            />
+            {categorySelection()}
+          </>
         }
         ListFooterComponent={
-          <AppButton title="Sign out" onPress={handleSignOutPressed} />
+          <>
+            <AppButton title="Load more" onPress={handleLoadMorePressed} />
+            <AppButton title="Sign out" onPress={handleSignOutPressed} />
+          </>
         }
         renderItem={({item}) => (
           <ListItem
