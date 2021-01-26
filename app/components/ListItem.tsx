@@ -25,7 +25,11 @@ interface Sneakers {
   year?: number;
 }
 
-const ListItem: FC<Sneakers> = ({media, shoe, name}) => {
+interface Props {
+  sneaker: Sneakers;
+}
+
+const ListItem: FC<Props> = ({sneaker: {media, shoe, name}}) => {
   return (
     <Pressable style={[styles.container, defaultStyles.shadows]}>
       <Image style={styles.image} source={{uri: media.thumbUrl}} />

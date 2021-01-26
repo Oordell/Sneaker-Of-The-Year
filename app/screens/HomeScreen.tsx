@@ -204,18 +204,7 @@ const HomeScreen: FC<Props> = () => {
             <AppButton title="Sign out" onPress={handleSignOutPressed} />
           </>
         }
-        renderItem={({item}) => (
-          <ListItem
-            brand={item.brand}
-            name={item.name}
-            media={item.media}
-            shoe={item.shoe}
-            title={item.title}
-            year={item.year}
-            releaseDate={item.releaseDate}
-            retailPrice={item.retailPrice}
-          />
-        )}
+        renderItem={({item}) => <ListItem sneaker={item} />}
       />
     </Screen>
   );
