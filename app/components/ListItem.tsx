@@ -1,5 +1,11 @@
 import React, {FC} from 'react';
-import {View, StyleSheet, Image, Pressable, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  GestureResponderEvent,
+} from 'react-native';
 import colors from '../config/colors';
 import AppText from './AppText';
 import defaultStyles from '../config/style';
@@ -27,11 +33,14 @@ interface Sneakers {
 
 interface Props {
   sneaker: Sneakers;
+  onPress?: (event: GestureResponderEvent) => void;
 }
 
-const ListItem: FC<Props> = ({sneaker: {media, shoe, name}}) => {
+const ListItem: FC<Props> = ({sneaker: {media, shoe, name}, onPress}) => {
   return (
-    <Pressable style={[styles.container, defaultStyles.shadows]}>
+    <Pressable
+      style={[styles.container, defaultStyles.shadows]}
+      onPress={onPress}>
       <Image style={styles.image} source={{uri: media.thumbUrl}} />
       <View style={styles.details}>
         <AppText numberOfLines={1}>{shoe}</AppText>
