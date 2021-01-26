@@ -39,7 +39,11 @@ interface Props {
 const ListItem: FC<Props> = ({sneaker: {media, shoe, name}, onPress}) => {
   return (
     <Pressable
-      style={[styles.container, defaultStyles.shadows]}
+      style={({pressed}) => [
+        {opacity: pressed ? 0.7 : 1.0},
+        styles.container,
+        defaultStyles.shadows,
+      ]}
       onPress={onPress}>
       <Image style={styles.image} source={{uri: media.thumbUrl}} />
       <View style={styles.details}>

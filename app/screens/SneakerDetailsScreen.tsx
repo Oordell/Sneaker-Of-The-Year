@@ -1,6 +1,7 @@
 import React, {FC} from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import AppText from '../components/AppText';
+import AppButton from '../components/buttons/AppButton';
 import Screen from '../components/Screen';
 import colors from '../config/colors';
 import defaultStyles from '../config/style';
@@ -22,17 +23,44 @@ const SneakerDetailsScreen: FC<Props> = ({route}) => {
         <AppText style={styles.title}>{sneaker.title}</AppText>
       </View>
       <View style={[styles.details, defaultStyles.shadows]}>
-        <AppText>Brand: {sneaker.brand}</AppText>
-        <AppText>Release Date: {sneaker.releaseDate}</AppText>
-        <AppText>Retail Price: {sneaker.retailPrice}</AppText>
-        <AppText>Style ID: {sneaker.styleId}</AppText>
-        <AppText>Colorway: {sneaker.colorway}</AppText>
+        <AppText>
+          <AppText style={styles.boldText}>Brand:</AppText> {sneaker.brand}
+        </AppText>
+        <AppText>
+          <AppText style={styles.boldText}>Release Date:</AppText>{' '}
+          {sneaker.releaseDate}
+        </AppText>
+        <AppText>
+          <AppText style={styles.boldText}>Retail Price:</AppText>{' '}
+          {sneaker.retailPrice}
+        </AppText>
+        <AppText>
+          <AppText style={styles.boldText}>Style ID:</AppText> {sneaker.styleId}
+        </AppText>
+        <AppText>
+          <AppText style={styles.boldText}>Colorway:</AppText>{' '}
+          {sneaker.colorway}
+        </AppText>
+      </View>
+      <View style={styles.buttonContainer}>
+        <AppButton
+          title="Add to top 10"
+          iconName="plus"
+          onPress={() => console.log('Added pressed')}
+        />
       </View>
     </Screen>
   );
 };
 
 const styles = StyleSheet.create({
+  boldText: {
+    fontWeight: 'bold',
+  },
+  buttonContainer: {
+    margin: 20,
+    bottom: 20,
+  },
   container: {
     flex: 1,
   },

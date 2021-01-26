@@ -19,6 +19,7 @@ const HomeNavigator: FC<Props> = () => {
       <Stack.Screen
         name={routs.SNEAKER_DETAILS}
         component={SneakerDetailsScreen}
+        options={{headerTitle: 'Sneaker Details', headerTitleAlign: 'center'}}
       />
     </Stack.Navigator>
   );
