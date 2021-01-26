@@ -16,9 +16,9 @@ interface Props {}
 
 interface ReqParams {
   page?: number;
-  styleId?: number;
+  sku?: string;
   name?: string;
-  shoe?: string;
+  silhouette?: string;
   brand?: string;
   gender?: string;
   colorway?: string;
@@ -54,6 +54,8 @@ const HomeScreen: FC<Props> = () => {
       limit: pageLimit,
       ...reqParam,
     });
+
+    //console.log('Sneaker response: ', newSneakers);
 
     if (reqParam.page === 0) {
       setSneakers(newSneakers.results);
@@ -187,7 +189,7 @@ const HomeScreen: FC<Props> = () => {
         style={styles.list}
         data={sneakers}
         numColumns={2}
-        keyExtractor={(sneaker) => sneaker.id.toString()}
+        keyExtractor={(sneaker) => sneaker.links.toString()}
         ListHeaderComponent={
           <>
             <RadioButtonGroup
@@ -204,18 +206,7 @@ const HomeScreen: FC<Props> = () => {
             <AppButton title="Sign out" onPress={handleSignOutPressed} />
           </>
         }
-        renderItem={({item}) => (
-          <ListItem
-            brand={item.brand}
-            name={item.name}
-            media={item.media}
-            shoe={item.shoe}
-            title={item.title}
-            year={item.year}
-            releaseDate={item.releaseDate}
-            retailPrice={item.retailPrice}
-          />
-        )}
+        renderItem={({item}) => <ListItem params={item} />}
       />
     </Screen>
   );

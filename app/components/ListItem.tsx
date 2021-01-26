@@ -4,34 +4,40 @@ import colors from '../config/colors';
 import AppText from './AppText';
 import defaultStyles from '../config/style';
 
-interface Media {
-  imageUrl?: string;
-  smallImageUrl?: string;
-  thumbUrl?: string;
-}
-
 interface Sneakers {
+  sku?: string;
   brand?: string;
+  name?: string;
   colorway?: string;
   gender?: string;
-  id?: string;
-  media?: Media;
-  name?: string;
-  releaseDate?: number;
-  retailPrice?: string;
-  shoe?: string;
-  styleId?: string;
-  title?: string;
-  year?: number;
+  silhouette?: string;
+  retailPrice?: number;
+  releaseDate?: string;
+  releaseYear?: number;
+  estimatedMarketValue?: number;
+  links?: string;
+  imgUrl?: string;
+  story?: string;
 }
 
-const ListItem: FC<Sneakers> = ({media, shoe, name}) => {
+interface Props {
+  params: Sneakers;
+}
+
+const ListItem: FC<Props> = ({params: {imgUrl, name, brand}}) => {
   return (
     <Pressable style={[styles.container, defaultStyles.shadows]}>
-      <Image style={styles.image} source={{uri: media.thumbUrl}} />
+      {imgUrl ? (
+        <Image style={styles.image} source={{uri: imgUrl}} />
+      ) : (
+        <Image
+          style={styles.image}
+          source={require('../assets/sneakers/snkr_placeholder.png')}
+        />
+      )}
       <View style={styles.details}>
-        <AppText numberOfLines={1}>{shoe}</AppText>
         <AppText numberOfLines={1}>{name}</AppText>
+        <AppText numberOfLines={1}>{brand}</AppText>
       </View>
     </Pressable>
   );
@@ -42,7 +48,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     borderRadius: 20,
     padding: 10,
-    alignItems: 'center',
     margin: 10,
     flex: 1,
   },

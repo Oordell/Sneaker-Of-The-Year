@@ -6,4 +6,5 @@ export default Object.freeze({
   TODDLER: {_id: 4, name: 'TODDLER'},
   UNISEX: {_id: 5, name: 'UNISEX'},
   WOMEN: {_id: 6, name: 'WOMEN'},
+  YOUTH: {_id: 7, name: 'YOUTH'},
 });
