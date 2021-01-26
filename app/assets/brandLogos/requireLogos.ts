@@ -5,7 +5,7 @@ export default Object.freeze({
   JORDAN: require('../../assets/brandLogos/logo_jordan.png'),
   NEW_BALANCE: require('../../assets/brandLogos/logo_new_balance.png'),
   NIKE: require('../../assets/brandLogos/logo_nike.png'),
-  PUMA: require('../../assets/brandLogos/logo_puma.jpeg'),
+  PUMA: require('../../assets/brandLogos/logo_puma.png'),
   REEBOK: require('../../assets/brandLogos/logo_reebok.png'),
   SAUCONY: require('../../assets/brandLogos/logo_saucony.png'),
   UNDER_ARMOUR: require('../../assets/brandLogos/logo_under_armour.png'),

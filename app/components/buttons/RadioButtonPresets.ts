@@ -65,6 +65,7 @@ const btnsYear = [
   {_id: sneakerYear.Y2019.year, title: '2019'},
   {_id: sneakerYear.Y2020.year, title: '2020'},
   {_id: sneakerYear.Y2021.year, title: '2021'},
+  {_id: 0, title: 'ALL'},
 ];
 
 export default {

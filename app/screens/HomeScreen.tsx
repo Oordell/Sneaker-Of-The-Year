@@ -137,6 +137,7 @@ const HomeScreen: FC<Props> = () => {
     }
 
     const params: ReqParams = {
+      ...reqParam,
       page: 0,
       brand: brand,
       name: name,
@@ -157,6 +158,7 @@ const HomeScreen: FC<Props> = () => {
     }
 
     const params: ReqParams = {
+      ...reqParam,
       page: 0,
       name: name,
       brand: brand,
@@ -166,6 +168,7 @@ const HomeScreen: FC<Props> = () => {
 
   const handleSetSneakerYearReq = (yearId: number) => {
     const params: ReqParams = {
+      ...reqParam,
       page: 0,
       releaseYear: yearId,
     };
