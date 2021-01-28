@@ -1,33 +1,49 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
+import usersApi from '../api/users';
+import AppButton from '../components/buttons/AppButton';
 import RankingCard from '../components/RankingCard';
 import Screen from '../components/Screen';
+
+interface TopTenSneaker {
+  ranking: number;
+  sneaker: any;
+}
 
 interface Props {}
 
 const TopTenScreen: FC<Props> = () => {
-  const data = [
-    {id: 1},
-    {id: 2},
-    {id: 3},
-    {id: 4},
-    {id: 5},
-    {id: 6},
-    {id: 7},
-    {id: 8},
-    {id: 9},
-    {id: 10},
-  ];
+  const [sneakers, setSneakers] = useState<TopTenSneaker[]>();
+
+  useEffect(() => {
+    getUsersTopTen();
+  }, []);
+
+  const getUsersTopTen = async () => {
+    const topTenSneakers = await usersApi.getUsersTopTenSneakers();
+    setSneakers(topTenSneakers);
+  };
 
   return (
     <Screen style={styles.container}>
       <FlatList
         style={styles.list}
-        data={data}
+        data={sneakers}
         numColumns={2}
-        keyExtractor={(sneaker) => sneaker.id.toString()}
-        renderItem={({item}) => <RankingCard ranking={item.id} />}
+        keyExtractor={(sneaker) => sneaker.ranking.toString()}
+        renderItem={({item}) => (
+          <RankingCard ranking={item.ranking} imgUrl={item.sneaker.imgUrl} />
+        )}
+        ListFooterComponent={
+          <>
+            {!sneakers || sneakers.length < 10 ? (
+              <AppButton title="add to top 10" iconName="plus" />
+            ) : (
+              <></>
+            )}
+          </>
+        }
       />
     </Screen>
   );
