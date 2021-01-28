@@ -16,6 +16,7 @@ import navigationTheme from './app/navigation/navigationTheme';
 import AuthContext from './app/auth/context';
 import authStorage from './app/auth/storage';
 import HomeNavigator from './app/navigation/HomeNavigator';
+import AppNavigator from './app/navigation/AppNavigator';
 
 Icon.loadFont();
 
@@ -38,7 +39,7 @@ const App = () => {
           barStyle="dark-content"
           backgroundColor={colors.background}
         />
-        {user ? <HomeNavigator /> : <AuthNavigatior />}
+        {user ? <AppNavigator /> : <AuthNavigatior />}
       </NavigationContainer>
     </AuthContext.Provider>
   );

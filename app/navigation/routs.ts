@@ -3,4 +3,5 @@ export default Object.freeze({
   REGISTER: 'Register',
   WELCOME: 'Welcome',
   SNEAKER_DETAILS: 'SneakerDetails',
+  TOP_TEN: 'TopTen',
 });
