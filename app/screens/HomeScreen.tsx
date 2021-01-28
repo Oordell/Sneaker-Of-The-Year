@@ -19,9 +19,9 @@ interface Props {
 
 interface ReqParams {
   page?: number;
-  styleId?: number;
+  sku?: string;
   name?: string;
-  shoe?: string;
+  silhouette?: string;
   brand?: string;
   gender?: string;
   colorway?: string;
@@ -57,6 +57,8 @@ const HomeScreen: FC<Props> = ({navigation}) => {
       limit: pageLimit,
       ...reqParam,
     });
+
+    //console.log('Sneaker response: ', newSneakers);
 
     if (reqParam.page === 0) {
       setSneakers(newSneakers.results);
@@ -190,7 +192,7 @@ const HomeScreen: FC<Props> = ({navigation}) => {
         style={styles.list}
         data={sneakers}
         numColumns={2}
-        keyExtractor={(sneaker) => sneaker.id.toString()}
+        keyExtractor={(sneaker) => sneaker.links.toString()}
         ListHeaderComponent={
           <>
             <RadioButtonGroup

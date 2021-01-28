@@ -1,6 +1,6 @@
 import logger from '../utility/logger';
 
-const baseUrl = 'https://api.thesneakerdatabase.com/v1/';
+const baseUrl = 'https://api.thesneakerdatabase.dev/v2/';
 
 interface Parameters {
   limit: number;

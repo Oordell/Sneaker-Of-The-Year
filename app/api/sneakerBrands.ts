@@ -11,5 +11,4 @@ export default Object.freeze({
   VANS: {_id: 9, name: 'VANS'},
   YEEZY: {_id: 10, name: 'YEEZY'},
   ADIDAS: {_id: 11, name: 'ADIDAS'},
-  OTHER: {_id: 12, name: 'OTHER'},
 });
