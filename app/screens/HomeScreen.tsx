@@ -192,7 +192,9 @@ const HomeScreen: FC<Props> = ({navigation}) => {
         style={styles.list}
         data={sneakers}
         numColumns={2}
-        keyExtractor={(sneaker) => sneaker.links.toString()}
+        keyExtractor={(sneaker) =>
+          `${sneaker.sku} ${sneaker.links} ${sneaker.estimatedMarketValue}`
+        }
         ListHeaderComponent={
           <>
             <RadioButtonGroup

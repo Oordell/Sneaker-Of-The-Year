@@ -10,8 +10,24 @@ interface Props {
   [propName: string]: any;
 }
 
+interface Sneakers {
+  sku?: string;
+  brand?: string;
+  name?: string;
+  colorway?: string;
+  gender?: string;
+  silhouette?: string;
+  retailPrice?: number;
+  releaseDate?: string;
+  releaseYear?: number;
+  estimatedMarketValue?: number;
+  links?: string;
+  imgUrl?: string;
+  story?: string;
+}
+
 const SneakerDetailsScreen: FC<Props> = ({route}) => {
-  const sneaker = route.params;
+  const sneaker: Sneakers = route.params;
 
   const handleAddToTopTenPressed = () => {
     console.log('Add to top 10');
@@ -33,11 +49,15 @@ const SneakerDetailsScreen: FC<Props> = ({route}) => {
     <Screen style={styles.container}>
       <ScrollView>
         <View style={[styles.imageAndTitle, defaultStyles.shadows]}>
-          <Image
-            style={styles.image}
-            source={{uri: sneaker.media.smallImageUrl}}
-          />
-          <AppText style={styles.title}>{sneaker.title}</AppText>
+          {sneaker.imgUrl ? (
+            <Image style={styles.image} source={{uri: sneaker.imgUrl}} />
+          ) : (
+            <Image
+              style={styles.image}
+              source={require('../assets/sneakers/snkr_placeholder.png')}
+            />
+          )}
+          <AppText style={styles.title}>{sneaker.name}</AppText>
           <View style={styles.buttonContainer}>
             <AppButtonSmall
               style={styles.buttonsSmall}
@@ -67,15 +87,20 @@ const SneakerDetailsScreen: FC<Props> = ({route}) => {
           </AppText>
           <AppText>
             <AppText style={styles.boldText}>Release Date:</AppText>{' '}
-            {sneaker.releaseDate}
+            {sneaker.releaseDate ? sneaker.releaseDate : 'Unknown'}
           </AppText>
           <AppText>
             <AppText style={styles.boldText}>Retail Price:</AppText>{' '}
-            {sneaker.retailPrice}
+            {sneaker.retailPrice ? '$' + sneaker.retailPrice : 'Unknown'}
           </AppText>
           <AppText>
-            <AppText style={styles.boldText}>Style ID:</AppText>{' '}
-            {sneaker.styleId}
+            <AppText style={styles.boldText}>Estimated Market Value:</AppText>{' '}
+            {sneaker.estimatedMarketValue
+              ? '$' + sneaker.estimatedMarketValue
+              : 'Unknown'}
+          </AppText>
+          <AppText>
+            <AppText style={styles.boldText}>Style ID:</AppText> {sneaker.sku}
           </AppText>
           <AppText>
             <AppText style={styles.boldText}>Colorway:</AppText>{' '}

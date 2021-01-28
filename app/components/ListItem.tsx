@@ -31,7 +31,7 @@ interface Props {
   onPress?: (event: GestureResponderEvent) => void;
 }
 
-const ListItem: FC<Props> = ({sneaker: {imgUrl, shoe, name}, onPress}) => {
+const ListItem: FC<Props> = ({sneaker: {imgUrl, brand, name}, onPress}) => {
   return (
     <Pressable
       style={({pressed}) => [
