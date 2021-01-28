@@ -1,5 +1,11 @@
 import React, {FC} from 'react';
-import {View, StyleSheet, Image, Pressable, Text} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  GestureResponderEvent,
+} from 'react-native';
 import colors from '../config/colors';
 import AppText from './AppText';
 import defaultStyles from '../config/style';
@@ -21,12 +27,19 @@ interface Sneakers {
 }
 
 interface Props {
-  params: Sneakers;
+  sneaker: Sneakers;
+  onPress?: (event: GestureResponderEvent) => void;
 }
 
-const ListItem: FC<Props> = ({params: {imgUrl, name, brand}}) => {
+const ListItem: FC<Props> = ({sneaker: {imgUrl, shoe, name}, onPress}) => {
   return (
-    <Pressable style={[styles.container, defaultStyles.shadows]}>
+    <Pressable
+      style={({pressed}) => [
+        {opacity: pressed ? 0.7 : 1.0},
+        styles.container,
+        defaultStyles.shadows,
+      ]}
+      onPress={onPress}>
       {imgUrl ? (
         <Image style={styles.image} source={{uri: imgUrl}} />
       ) : (

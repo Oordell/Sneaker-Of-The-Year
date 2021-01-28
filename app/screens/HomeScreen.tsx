@@ -11,8 +11,11 @@ import ListItem from '../components/ListItem';
 import sneakerCategories from '../api/sneakerCategories';
 import RadioButtonPresets from '../components/buttons/RadioButtonPresets';
 import snkrPopular from '../api/sneakerPopular';
+import routs from '../navigation/routs';
 
-interface Props {}
+interface Props {
+  [propName: string]: any;
+}
 
 interface ReqParams {
   page?: number;
@@ -29,7 +32,7 @@ interface ReqParams {
 
 const pageLimit: number = 20;
 
-const HomeScreen: FC<Props> = () => {
+const HomeScreen: FC<Props> = ({navigation}) => {
   const {signOut} = useAuth();
   const [sneakers, setSneakers] = useState<any[]>();
   const [countOfSneakers, setCountOfSneakers] = useState<number>(0);
@@ -206,7 +209,12 @@ const HomeScreen: FC<Props> = () => {
             <AppButton title="Sign out" onPress={handleSignOutPressed} />
           </>
         }
-        renderItem={({item}) => <ListItem params={item} />}
+        renderItem={({item}) => (
+          <ListItem
+            sneaker={item}
+            onPress={() => navigation.navigate(routs.SNEAKER_DETAILS, item)}
+          />
+        )}
       />
     </Screen>
   );
