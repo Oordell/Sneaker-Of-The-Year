@@ -14,8 +14,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AuthNavigatior from './app/navigation/AuthNavigatior';
 import navigationTheme from './app/navigation/navigationTheme';
 import AuthContext from './app/auth/context';
-import HomeScreen from './app/screens/HomeScreen';
 import authStorage from './app/auth/storage';
+import HomeNavigator from './app/navigation/HomeNavigator';
 
 Icon.loadFont();
 
@@ -38,7 +38,7 @@ const App = () => {
           barStyle="dark-content"
           backgroundColor={colors.background}
         />
-        {user ? <HomeScreen /> : <AuthNavigatior />}
+        {user ? <HomeNavigator /> : <AuthNavigatior />}
       </NavigationContainer>
     </AuthContext.Provider>
   );
