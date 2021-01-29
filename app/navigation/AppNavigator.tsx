@@ -4,6 +4,7 @@ import HomeNavigator from './HomeNavigator';
 import TopTenScreen from '../screens/TopTenScreen';
 import {Icon} from 'react-native-elements';
 import colors from '../config/colors';
+import DragAndDropScreen from '../screens/DragAndDropScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -32,7 +33,7 @@ const AppNavigator: FC<Props> = () => {
       />
       <Tab.Screen
         name="Top 10"
-        component={TopTenScreen}
+        component={DragAndDropScreen}
         options={{
           tabBarIcon: ({color}) => (
             <Icon

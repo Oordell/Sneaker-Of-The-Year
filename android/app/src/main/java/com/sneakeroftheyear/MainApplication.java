@@ -14,6 +14,9 @@ import java.util.List;
 import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
 import androidx.multidex.MultiDexApplication;
 
+import com.facebook.react.bridge.JSIModulePackage;
+  import com.swmansion.reanimated.ReanimatedJSIModulePackage; 
+
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -37,6 +40,11 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         protected String getJSMainModuleName() {
           return "index";
         }
+
+        @Override
+      protected JSIModulePackage getJSIModulePackage() {
+        return new ReanimatedJSIModulePackage(); // <- add
+      }
       };
 
   @Override

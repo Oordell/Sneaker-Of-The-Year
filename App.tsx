@@ -17,6 +17,7 @@ import AuthContext from './app/auth/context';
 import authStorage from './app/auth/storage';
 import HomeNavigator from './app/navigation/HomeNavigator';
 import AppNavigator from './app/navigation/AppNavigator';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 Icon.loadFont();
 
@@ -33,15 +34,17 @@ const App = () => {
   };
 
   return (
-    <AuthContext.Provider value={{user, setUser}}>
-      <NavigationContainer theme={navigationTheme}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor={colors.background}
-        />
-        {user ? <AppNavigator /> : <AuthNavigatior />}
-      </NavigationContainer>
-    </AuthContext.Provider>
+    <SafeAreaProvider>
+      <AuthContext.Provider value={{user, setUser}}>
+        <NavigationContainer theme={navigationTheme}>
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor={colors.background}
+          />
+          {user ? <AppNavigator /> : <AuthNavigatior />}
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </SafeAreaProvider>
   );
 };
 
