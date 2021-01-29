@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {View, StyleSheet, Image, ScrollView} from 'react-native';
+import usersApi from '../api/users';
 import AppText from '../components/AppText';
 import AppButtonSmall from '../components/buttons/AppButtonSmall';
 import Screen from '../components/Screen';
@@ -30,7 +31,7 @@ const SneakerDetailsScreen: FC<Props> = ({route}) => {
   const sneaker: Sneakers = route.params;
 
   const handleAddToTopTenPressed = () => {
-    console.log('Add to top 10');
+    usersApi.addSneakerToTopTen(sneaker);
   };
 
   const handleAddToClosetPressed = () => {
