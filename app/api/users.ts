@@ -2,6 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import firebaseAuth from '@react-native-firebase/auth';
 import logger from '../utility/logger';
 import apiEndpoints from './endpoints';
+import sneakersApi from './sneakers';
 
 const dbRef = firestore().collection(apiEndpoints.USERS);
 
@@ -86,7 +87,8 @@ const addSneakerToTopTen = async (sneaker: Sneaker, placement?: number) => {
 
     let currentTopTen = user.data().topTenSneakers;
     for (let rankedSneaker of currentTopTen) {
-      if (rankedSneaker.sneaker.sku === sneaker.sku) {
+      let snkr = await rankedSneaker.sneaker.get();
+      if (snkr.data().sku === sneaker.sku) {
         return logger.logMessage(
           'Trying to add a sneaker to top ten, but the sneaker is already on the users top ten.',
         );
@@ -107,14 +109,26 @@ const addSneakerToTopTen = async (sneaker: Sneaker, placement?: number) => {
       }
     }
 
+    const placementOnTopTen = placement
+      ? placement
+      : user.data().numberOfSneakersInTopTen + 1;
+
+    // Add the sneaker to the DB:
+    await sneakersApi.addOrUpdateSneaker(sneaker, placementOnTopTen);
+
+    // Get the sneaker to create a reference.
+    const sneakerRef = await sneakersApi.getSneaker(sneaker);
+
+    // Create a Ranked sneaker object
     const newSneaker = {
-      ranking: placement ? placement : user.data().numberOfSneakersInTopTen + 1,
-      sneaker: sneaker,
+      ranking: placementOnTopTen,
+      sneaker: sneakerRef[0].ref,
     };
 
     // Update the users info:
+    const increment = firestore.FieldValue.increment(1);
     await dbRef.doc(currentUser.uid).update({
-      numberOfSneakersInTopTen: user.data().numberOfSneakersInTopTen + 1,
+      numberOfSneakersInTopTen: increment,
       topTenSneakers: [...currentTopTen, newSneaker],
     });
   } catch (error) {
@@ -130,7 +144,15 @@ const getUsersTopTenSneakers = async () => {
     const currentUser = firebaseAuth().currentUser;
     const user = await dbRef.doc(currentUser.uid).get();
 
-    return user.data().topTenSneakers;
+    let sneakers = [];
+    for (let sneakerRanking of user.data().topTenSneakers) {
+      sneakers.push({
+        ranking: sneakerRanking.ranking,
+        sneaker: await sneakerRanking.sneaker.get(),
+      });
+    }
+
+    return sneakers;
   } catch (error) {
     logger.logErrorAndMessage(
       error,
@@ -139,8 +161,42 @@ const getUsersTopTenSneakers = async () => {
   }
 };
 
+const deleteSneakerFromUsersTopTen = async (sneakerRanking: TopTenSneaker) => {
+  try {
+    const currentUser = firebaseAuth().currentUser;
+    const user = await dbRef.doc(currentUser.uid).get();
+
+    let newTopTenSneakers = user
+      .data()
+      .topTenSneakers.filter(
+        (rankedSneaker: TopTenSneaker) =>
+          rankedSneaker.ranking != sneakerRanking.ranking,
+      );
+    newTopTenSneakers.forEach((element: TopTenSneaker) => {
+      if (element.ranking > sneakerRanking.ranking) element.ranking -= 1;
+    });
+
+    const decrement = firestore.FieldValue.increment(-1);
+    await dbRef.doc(currentUser.uid).update({
+      numberOfSneakersInTopTen: decrement,
+      topTenSneakers: newTopTenSneakers,
+    });
+
+    await sneakersApi.updateRatingOfSneaker(
+      sneakerRanking.sneaker.data(),
+      sneakerRanking.ranking,
+    );
+  } catch (error) {
+    logger.logErrorAndMessage(
+      error,
+      'Error trying to remove a sneaker from the users top ten in Firestore.',
+    );
+  }
+};
+
 export default {
   createNewOrUpdateUser,
   addSneakerToTopTen,
   getUsersTopTenSneakers,
+  deleteSneakerFromUsersTopTen,
 };

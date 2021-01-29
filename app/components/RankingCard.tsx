@@ -3,6 +3,7 @@ import {View, StyleSheet, Pressable, Image} from 'react-native';
 import colors from '../config/colors';
 import AppText from './AppText';
 import defaultStyles from '../config/style';
+import {Icon} from 'react-native-elements';
 
 interface Props {
   ranking: number;
@@ -10,20 +11,30 @@ interface Props {
   [propName: string]: any;
 }
 
-const RankingCard: FC<Props> = ({ranking, imgUrl}) => {
+const RankingCard: FC<Props> = ({ranking, imgUrl, onDeletePressed}) => {
   return (
     <Pressable style={[styles.container, defaultStyles.shadows]}>
       <View style={[styles.ranking, defaultStyles.shadows]}>
         <AppText style={styles.number}>{ranking}</AppText>
       </View>
-      {imgUrl ? (
-        <Image style={styles.image} source={{uri: imgUrl}} />
-      ) : (
-        <Image
-          style={styles.image}
-          source={require('../assets/sneakers/snkr_placeholder.png')}
+
+      <Image
+        style={styles.image}
+        source={
+          imgUrl
+            ? {uri: imgUrl}
+            : require('../assets/sneakers/snkr_placeholder.png')
+        }
+      />
+
+      <Pressable style={styles.deleteButton} onPress={onDeletePressed}>
+        <Icon
+          name="delete"
+          size={30}
+          color={colors.text}
+          type="material-community"
         />
-      )}
+      </Pressable>
     </Pressable>
   );
 };
@@ -33,19 +44,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 20,
-    padding: 10,
+    padding: 5,
     margin: 5,
     backgroundColor: colors.background,
     flexDirection: 'row',
     flex: 1,
   },
+  deleteButton: {
+    right: 5,
+    top: 5,
+    position: 'absolute',
+  },
   image: {
-    width: 110,
-    height: 90,
+    width: 120,
+    height: 80,
   },
   number: {
     fontWeight: 'bold',
-    fontSize: 22,
+    fontSize: 20,
   },
   ranking: {
     padding: 10,

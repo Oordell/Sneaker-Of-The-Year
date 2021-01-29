@@ -92,6 +92,7 @@ const updateRatingOfSneaker = async (
   const oldRanking = oldPlacementOnTopTen * -1 + 11;
   const newRanking =
     newPlacementOnTopTen < 1 ? 0 : newPlacementOnTopTen * -1 + 11;
+
   try {
     const sneakersInDb = await getSneaker(sneaker);
 
@@ -99,10 +100,10 @@ const updateRatingOfSneaker = async (
       return logger.logMessage("Couldn't find sneaker in Firestore DB.");
 
     const decrement = firestore.FieldValue.increment(-1);
-    const sneakerDoc = await sneakersInDb[0].get();
+    const sneakerDoc = await sneakersInDb[0].data();
     sneakersInDb[0].ref.update({
       numOfPlacementsOnTopTens:
-        newRanking === 0 ? sneakerDoc.numOfPlacementsOnTopTens : decrement,
+        newRanking === 0 ? decrement : sneakerDoc.numOfPlacementsOnTopTens,
       rankingTotal: sneakerDoc.rankingTotal + newRanking - oldRanking,
     });
   } catch (error) {
@@ -114,6 +115,7 @@ const updateRatingOfSneaker = async (
 };
 
 export default {
+  getSneaker,
   addOrUpdateSneaker,
   updateRatingOfSneaker,
 };
