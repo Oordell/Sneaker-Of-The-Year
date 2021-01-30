@@ -1,10 +1,10 @@
-import React, {FC} from 'react';
+import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
 import colors from '../../config/colors';
 import {WIDTH, HEIGHT, MARGIN} from './config';
 
 interface Props {
-  _id: string | number;
+  id: string | number;
   imagePath: any;
   onLongPress: () => void;
 }
@@ -12,7 +12,7 @@ interface Props {
 const SneakerTile = ({imagePath}: Props) => {
   return (
     <View style={styles.container}>
-      <Image source={imagePath} style={[styles.container, styles.image]} />
+      <Image source={imagePath} style={[styles.image]} />
     </View>
   );
 };
@@ -21,12 +21,14 @@ const styles = StyleSheet.create({
   container: {
     width: WIDTH,
     height: HEIGHT,
-    backgroundColor: colors.primary,
   },
   image: {
     borderRadius: MARGIN,
+    margin: MARGIN * 2,
     backgroundColor: colors.text_veryLight,
     resizeMode: 'contain',
+    flex: 1,
+    width: WIDTH - 4 * MARGIN,
   },
 });
 

@@ -1,6 +1,5 @@
 import React, {FC} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
-import Screen from '../components/Screen';
+import {StyleSheet} from 'react-native';
 import buttons from '../components/buttons/RadioButtonPresets';
 import SneakerTile from '../components/dragAndDrop/SneakerTile';
 import {MARGIN} from '../components/dragAndDrop/config';
@@ -19,7 +18,7 @@ const DragAndDropScreen: FC<Props> = () => {
           <SneakerTile
             onLongPress={() => true}
             key={logo._id}
-            _id={logo._id}
+            id={logo._id}
             imagePath={logo.imagePath}
           />
         ))}

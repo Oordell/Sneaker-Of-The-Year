@@ -7,11 +7,26 @@ export interface Positions {
 
 const {width} = Dimensions.get('window');
 export const MARGIN = 10;
-export const WIDTH = width / 2 - MARGIN;
-export const HEIGHT = WIDTH * 0.8;
 export const COL = 2;
+export const WIDTH = width / COL - MARGIN;
+export const HEIGHT = WIDTH * 0.8;
 
 export const animationConfig = {
   easing: Easing.inOut(Easing.ease),
   duration: 350,
+};
+
+export const getPosition = (order: number) => {
+  'worklet';
+  return {
+    x: (order % COL) * WIDTH,
+    y: Math.floor(order / COL) * HEIGHT,
+  };
+};
+
+export const getOrder = (x: number, y: number) => {
+  'worklet';
+  const col = Math.round(x / WIDTH);
+  const row = Math.round(y / HEIGHT);
+  return row * COL + col;
 };
