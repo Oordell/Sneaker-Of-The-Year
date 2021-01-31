@@ -73,8 +73,26 @@ const Item = ({children, positions, id}: Props) => {
         );
         if (idToSwap) {
           const newPositions = JSON.parse(JSON.stringify(positions.value));
+          if (newPositions[id] > newPositions[idToSwap]) {
+            for (let element in newPositions) {
+              if (
+                newPositions[element] >= newOrder &&
+                newPositions[element] < oldOrder
+              ) {
+                newPositions[element] += 1;
+              }
+            }
+          } else {
+            for (let element in newPositions) {
+              if (
+                newPositions[element] <= newOrder &&
+                newPositions[element] > oldOrder
+              ) {
+                newPositions[element] -= 1;
+              }
+            }
+          }
           newPositions[id] = newOrder;
-          newPositions[idToSwap] = oldOrder;
           positions.value = newPositions;
         }
       }
